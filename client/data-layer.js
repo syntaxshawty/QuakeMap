@@ -1,7 +1,7 @@
 var mapboxgl = require("mapbox-gl/dist/mapbox-gl.js");
 
 async function addDataLayer(map) {
-  const response = await fetch("/api/");
+  const response = await fetch("/api/quakes/month");
   const data = await response.json();
 
   map.addSource("earthquakes", {

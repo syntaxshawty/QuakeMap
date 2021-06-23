@@ -2,7 +2,6 @@ const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
-const fetch = require("node-fetch");
 
 // logging and body-parsing
 app.use(morgan("dev"));
@@ -13,14 +12,10 @@ app.use(express.urlencoded({ extended: false }));
 // like your 'index.html' and 'bundle.js'.
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-// other routes go below
-app.get("/api/", async (req, res, next) => {
-  await fetch(
-    "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson"
-  )
-    .then((res) => res.json())
-    .then((data) => res.send(data))
-    .catch((err) => console.log(err));
+app.use("/api", require("./api"));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 
 // catch 404 (i.e., no route was hit) and forward to error handler
